@@ -1,0 +1,249 @@
+"use client";
+
+import { useState } from "react";
+import { type Variants, AnimatePresence, motion } from "motion/react";
+import { useMediaQuery } from "@/hooks/use-media-query";
+import { Button, type ButtonProps } from "@/components/ui/button";
+import { KeyboardArrowDown } from "relume-icons";
+import { Card } from "@/components/ui/card";
+
+type ImageProps = {
+  url?: string;
+  src: string;
+  alt?: string;
+};
+
+type NavLink = {
+  url: string;
+  title: string;
+  subMenuLinks?: NavLink[];
+};
+
+type Props = {
+  logo: ImageProps;
+  navLinks: NavLink[];
+  buttons: ButtonProps[];
+};
+
+export type Navbar2Props = React.ComponentPropsWithoutRef<"section"> & Partial<Props>;
+
+export const Navbar2 = (props: Navbar2Props) => {
+  const { logo, navLinks, buttons } = {
+    ...Navbar2Defaults,
+    ...props,
+  };
+
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 991px)");
+
+  return (
+    <section className="z-[999] flex w-full items-center border-b border-scheme-border bg-scheme-background lg:min-h-18 lg:px-[5%]">
+      <div className="mx-auto size-full lg:grid lg:grid-cols-[0.375fr_1fr_0.375fr] lg:items-center lg:justify-between lg:gap-4">
+        <div className="flex min-h-16 items-center justify-between px-[5%] md:min-h-18 lg:min-h-full lg:px-0">
+          <a href={logo.url}>
+            <img className="h-8 w-auto max-w-[70vw] md:h-10" src={logo.src} alt={logo.alt} />
+          </a>
+          <div className="flex items-center gap-4 lg:hidden">
+            <div>
+              {buttons.map((button, index) => (
+                <Button key={index} className="w-full px-4 py-1" {...button}>
+                  {button.title}
+                </Button>
+              ))}
+            </div>
+            <button
+              className="-mr-2 flex size-12 flex-col items-center justify-center"
+              onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            >
+              <motion.span
+                className="my-[3px] h-0.5 w-6 bg-scheme-text"
+                animate={isMobileMenuOpen ? ["open", "rotatePhase"] : "closed"}
+                variants={topLineVariants}
+              />
+              <motion.span
+                className="my-[3px] h-0.5 w-6 bg-scheme-text"
+                animate={isMobileMenuOpen ? "open" : "closed"}
+                variants={middleLineVariants}
+              />
+              <motion.span
+                className="my-[3px] h-0.5 w-6 bg-scheme-text"
+                animate={isMobileMenuOpen ? ["open", "rotatePhase"] : "closed"}
+                variants={bottomLineVariants}
+              />
+            </button>
+          </div>
+        </div>
+        <motion.div
+          variants={{
+            open: {
+              height: "var(--height-open, 100dvh)",
+            },
+            close: {
+              height: "var(--height-closed, 0)",
+            },
+          }}
+          animate={isMobileMenuOpen ? "open" : "close"}
+          initial="close"
+          exit="close"
+          transition={{ duration: 0.4 }}
+          className="overflow-hidden px-[5%] text-center lg:flex lg:items-center lg:justify-center lg:px-0 lg:[--height-closed:auto] lg:[--height-open:auto]"
+        >
+          {navLinks.map((navLink, index) =>
+            navLink.subMenuLinks && navLink.subMenuLinks.length > 0 ? (
+              <SubMenu key={index} navLink={navLink} isMobile={isMobile} />
+            ) : (
+              <a
+                key={index}
+                href={navLink.url}
+                className="block py-3 text-base first:pt-7 lg:px-4 lg:py-2 first:lg:pt-2"
+              >
+                {navLink.title}
+              </a>
+            ),
+          )}
+        </motion.div>
+        <div className="hidden justify-self-end lg:block">
+          {buttons.map((button, index) => (
+            <Button key={index} className="px-6 py-2" {...button}>
+              {button.title}
+            </Button>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+};
+
+const SubMenu = ({ navLink, isMobile }: { navLink: NavLink; isMobile: boolean }) => {
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const MotionCard = isMobile ? motion.nav : motion.create(Card);
+
+  return (
+    <section
+      onMouseEnter={() => !isMobile && setIsDropdownOpen(true)}
+      onMouseLeave={() => !isMobile && setIsDropdownOpen(false)}
+    >
+      <p
+        role="button"
+        className="flex w-full items-center justify-center gap-2 py-3 text-center text-base lg:w-auto lg:flex-none lg:justify-start lg:px-4 lg:py-2"
+        onClick={() => setIsDropdownOpen((prev) => !prev)}
+      >
+        <span>{navLink.title}</span>
+        <motion.span
+          animate={isDropdownOpen ? "rotated" : "initial"}
+          variants={{
+            rotated: { rotate: 180 },
+            initial: { rotate: 0 },
+          }}
+          transition={{ duration: 0.3 }}
+        >
+          <KeyboardArrowDown className="text-scheme-text" />
+        </motion.span>
+      </p>
+      {isDropdownOpen && (
+        <AnimatePresence>
+          <MotionCard
+            animate={isDropdownOpen ? "open" : "close"}
+            initial="close"
+            exit="close"
+            variants={{
+              open: {
+                visibility: "visible",
+                opacity: "var(--opacity-open, 100%)",
+                y: 0,
+              },
+              close: {
+                visibility: "hidden",
+                opacity: "var(--opacity-close, 0)",
+                y: "var(--y-close, 0%)",
+              },
+            }}
+            transition={{ duration: 0.2 }}
+            className="bg-scheme-background lg:absolute lg:z-50 lg:border lg:border-scheme-border lg:p-2 lg:[--y-close:25%]"
+          >
+            {navLink.subMenuLinks?.map((subMenuLink, index) => (
+              <a
+                key={index}
+                href={subMenuLink.url}
+                className="block py-3 text-center lg:px-4 lg:py-2 lg:text-left"
+              >
+                {subMenuLink.title}
+              </a>
+            ))}
+          </MotionCard>
+        </AnimatePresence>
+      )}
+    </section>
+  );
+};
+
+export const Navbar2Defaults: Props = {
+  logo: {
+    url: "#",
+    src: "https://d22po4pjz3o32e.cloudfront.net/logo-image.svg",
+    alt: "Logo image",
+  },
+  navLinks: [
+    { title: "Link One", url: "#" },
+    { title: "Link Two", url: "#" },
+    { title: "Link Three", url: "#" },
+    {
+      title: "Link Four",
+      url: "#",
+      subMenuLinks: [
+        { title: "Link Five", url: "#" },
+        { title: "Link Six", url: "#" },
+        { title: "Link Seven", url: "#" },
+      ],
+    },
+  ],
+  buttons: [
+    {
+      title: "Button",
+      size: "sm",
+    },
+  ],
+};
+
+const topLineVariants: Variants = {
+  open: {
+    translateY: 8,
+    transition: { delay: 0.1 },
+  },
+  rotatePhase: {
+    rotate: -45,
+    transition: { delay: 0.2 },
+  },
+  closed: {
+    translateY: 0,
+    rotate: 0,
+    transition: { duration: 0.2 },
+  },
+};
+
+const middleLineVariants: Variants = {
+  open: {
+    width: 0,
+    transition: { duration: 0.1 },
+  },
+  closed: {
+    width: "1.5rem",
+    transition: { delay: 0.3, duration: 0.2 },
+  },
+};
+
+const bottomLineVariants: Variants = {
+  open: {
+    translateY: -8,
+    transition: { delay: 0.1 },
+  },
+  rotatePhase: {
+    rotate: 45,
+    transition: { delay: 0.2 },
+  },
+  closed: {
+    translateY: 0,
+    rotate: 0,
+    transition: { duration: 0.2 },
+  },
+};

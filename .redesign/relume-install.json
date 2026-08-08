@@ -1,0 +1,63 @@
+{
+  "slugs": [
+    "navbar2_component",
+    "section_header113",
+    "section_layout1",
+    "section_portfolio12",
+    "section_layout621",
+    "section_testimonial5",
+    "footer3_component"
+  ],
+  "files": [
+    {
+      "path": "components/relume/Navbar2.tsx",
+      "sourceSha256": "18e3a4332a850a103f5999c7c43b407a9574b71facc90cb916596dfe073ef026",
+      "sha256": "a6441ee92a72bde7b0bc5c4d401896776e137af5267cbcbfe9556a69e3e52e88",
+      "compatibilityEdits": 4
+    },
+    {
+      "path": "components/relume/Header113.tsx",
+      "sourceSha256": "681d3b65bdfc69767c385327e7b60b0927ec4c966c67b5de35195d2f5c111848",
+      "sha256": "681d3b65bdfc69767c385327e7b60b0927ec4c966c67b5de35195d2f5c111848",
+      "compatibilityEdits": 0
+    },
+    {
+      "path": "components/relume/Layout1.tsx",
+      "sourceSha256": "463f1425f927d7a9f6a0ceda7ed8bf27c18385e63b25ee0951f0a5ae85f00e58",
+      "sha256": "463f1425f927d7a9f6a0ceda7ed8bf27c18385e63b25ee0951f0a5ae85f00e58",
+      "compatibilityEdits": 0
+    },
+    {
+      "path": "components/relume/Portfolio12.tsx",
+      "sourceSha256": "6e8bb2bc997f008f1475b8f60bacdf19694a50038c7337508f3c3446329eefd4",
+      "sha256": "6e8bb2bc997f008f1475b8f60bacdf19694a50038c7337508f3c3446329eefd4",
+      "compatibilityEdits": 0
+    },
+    {
+      "path": "components/relume/Layout621.tsx",
+      "sourceSha256": "4bd6830fa4c359ff90b875dd8975035c7683ed85ddbf8b384004b9bbede30e46",
+      "sha256": "4bd6830fa4c359ff90b875dd8975035c7683ed85ddbf8b384004b9bbede30e46",
+      "compatibilityEdits": 0
+    },
+    {
+      "path": "components/relume/Testimonial5.tsx",
+      "sourceSha256": "a12df4bd598a3812e1efd5221022888b8e4e786ba6eb738148a5b03ab288c5f0",
+      "sha256": "a12df4bd598a3812e1efd5221022888b8e4e786ba6eb738148a5b03ab288c5f0",
+      "compatibilityEdits": 0
+    },
+    {
+      "path": "components/relume/Footer3.tsx",
+      "sourceSha256": "416eae6f362a886dfd95b99ac260487ce153770366e401e8e670013622e8ad0d",
+      "sha256": "416eae6f362a886dfd95b99ac260487ce153770366e401e8e670013622e8ad0d",
+      "compatibilityEdits": 0
+    }
+  ],
+  "dependencies": [
+    "@radix-ui/react-slot",
+    "class-variance-authority@0.7.1",
+    "clsx@^2.1.1",
+    "motion@^12.15.0",
+    "relume-icons@1.3.0",
+    "tailwind-merge@^2.2.2"
+  ]
+}
